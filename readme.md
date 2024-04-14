@@ -61,3 +61,21 @@
 
     renderer.shadowMap.autoUpdate = false
     renderer.shadowMap.needsUpdate = true
+
+14. Textures :
+
+    Textures take a lot of space in the GPU memory especially with the mipmaps.
+    The Texture file weight has nothing to do with that, only the resolution matters. We should try to reduce the resolution to the minimum while keeping a decent result.
+
+    Keep a power of 2 resolutions:
+
+        While resizing, remember to keep a power of 2 resolution for mipmaps, The resolutions doesn't need to be square. If we don't do this three.js will try to fix it by resizing the image to the closest power of 2 resolution.
+
+    Use Right format:
+    Using the right format can reduce the loading time, We can use .jpg or .png according to the image and compression but also the alpha
+
+        We can use online tools like TinyPNG to reduce the weight even more.
+
+    We can also use basis format:
+    Basis is format just like .jpg and .png but the compression is powerful, and the format can be read by the GPU more easily.
+    But it is hard to generate and it's a lossy compression.
