@@ -3,6 +3,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 // import stats for viewing FPS of website.
 import Stats from "stats.js";
 
+// import 'BufferGeometryUtils'
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 /**
  * Stats
  */
@@ -197,21 +199,54 @@ renderer.shadowMap.autoUpdate = false;
 renderer.shadowMap.needsUpdate = true;
 
 // // Tip 18
-// for(let i = 0; i < 50; i++)
-// {
-//     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+// ######### Mutualize geometry #########
+// Keeping geometry out of the loop to create mesh
+// const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
-//     const material = new THREE.MeshNormalMaterial()
+// for (let i = 0; i < 50; i++) {
+//   const material = new THREE.MeshNormalMaterial();
 
-//     const mesh = new THREE.Mesh(geometry, material)
-//     mesh.position.x = (Math.random() - 0.5) * 10
-//     mesh.position.y = (Math.random() - 0.5) * 10
-//     mesh.position.z = (Math.random() - 0.5) * 10
-//     mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2
-//     mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2
+//   const mesh = new THREE.Mesh(geometry, material);
+//   mesh.position.x = (Math.random() - 0.5) * 10;
+//   mesh.position.y = (Math.random() - 0.5) * 10;
+//   mesh.position.z = (Math.random() - 0.5) * 10;
+//   mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
+//   mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
 
-//     scene.add(mesh)
+//   scene.add(mesh);
 // }
+
+// ######### Merge geometries #########
+
+const geomertries = [];
+for (let i = 0; i < 50; i++) {
+  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  // We will create geometries and we will move the geomtries, instead of moving the mesh because
+  // we only have one mesh.
+
+  // All geometries will be placed at the center and than we will move geometries to different points. The
+  // origin point will be same but the vertices will be at different places.
+
+  geometry.rotateX((Math.random() - 0.5) * Math.PI * 2);
+  geometry.rotateY((Math.random() - 0.5) * Math.PI * 2);
+
+  geometry.translate(
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 10
+  );
+
+  // create 50 geometries and save it in the array
+  geomertries.push(geometry);
+}
+
+const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geomertries);
+
+// We will have one material, one mesh and one geometry composed of multiple geomertries
+const material = new THREE.MeshNormalMaterial();
+const mesh = new THREE.Mesh(mergedGeometry, material);
+
+scene.add(mesh);
 
 // // Tip 19
 // for(let i = 0; i < 50; i++)

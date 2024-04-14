@@ -79,3 +79,23 @@
     We can also use basis format:
     Basis is format just like .jpg and .png but the compression is powerful, and the format can be read by the GPU more easily.
     But it is hard to generate and it's a lossy compression.
+
+15. Geometries:
+
+    All Geometries are now BufferGeometries, without having to use the word buffer.
+    Thus there is no point in doing optimisation for geometries.
+
+16. Updating the vertices of a geometry is terrible for the performance avoid doing it in the tick() function.
+    If we want to animate the vertices, we should do it in the vertex shaders.
+
+17. Mutualize Geometries:
+    If we want to have multiples Meshes using the same geometry shape, create only one geometry, and use it on all the meshes.
+
+18. Merge Geomtries:
+    While creating multiple meshes even with mutual geometry there will be mulitple draw calls that is bad for performance, what we can do is to merge all the draw calls togethers so we draw the same amount of triangles but only in one draw call.
+
+    If the geometries are not supposed to move, we can merge them by using the 'BufferGeometryUtils'.
+
+    We don't need to instantiate it, and we can use its methods directly.
+
+    Use the mergeBufferGeomtries(...) with an array of geometries. We can then use the merged geometry with a single Mesh.
