@@ -251,19 +251,19 @@ renderer.shadowMap.needsUpdate = true;
 // Tip 19
 // ############ Mutualize Materials #############
 
-const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-// Puting it outside the loop, so the material is created only once.
-const material = new THREE.MeshNormalMaterial();
-for (let i = 0; i < 50; i++) {
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.x = (Math.random() - 0.5) * 10;
-  mesh.position.y = (Math.random() - 0.5) * 10;
-  mesh.position.z = (Math.random() - 0.5) * 10;
-  mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
-  mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
+// const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+// // Puting it outside the loop, so the material is created only once.
+// const material = new THREE.MeshNormalMaterial();
+// for (let i = 0; i < 50; i++) {
+//   const mesh = new THREE.Mesh(geometry, material);
+//   mesh.position.x = (Math.random() - 0.5) * 10;
+//   mesh.position.y = (Math.random() - 0.5) * 10;
+//   mesh.position.z = (Math.random() - 0.5) * 10;
+//   mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
+//   mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
 
-  scene.add(mesh);
-}
+//   scene.add(mesh);
+// }
 
 // // Tip 20
 // const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
@@ -282,22 +282,40 @@ for (let i = 0; i < 50; i++) {
 //     scene.add(mesh)
 // }
 
-// // Tip 22
-// const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+// Tip 22
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
-// const material = new THREE.MeshNormalMaterial()
+const material = new THREE.MeshNormalMaterial();
+// Instanced Mesh
+const mesh = new THREE.InstancedMesh(geometry, material, 50);
+// Better for memory mangment
+mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+scene.add(mesh);
 
-// for(let i = 0; i < 50; i++)
-// {
-//     const mesh = new THREE.Mesh(geometry, material)
-//     mesh.position.x = (Math.random() - 0.5) * 10
-//     mesh.position.y = (Math.random() - 0.5) * 10
-//     mesh.position.z = (Math.random() - 0.5) * 10
-//     mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2
-//     mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2
+for (let i = 0; i < 50; i++) {
+  // For positioning the cube
+  const position = new THREE.Vector3(
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 10,
+    (Math.random() - 0.5) * 10
+  );
 
-//     scene.add(mesh)
-// }
+  // For rotating the cube
+  const quaternion = new THREE.Quaternion();
+  quaternion.setFromEuler(
+    new THREE.Euler(
+      (Math.random() - 0.5) * Math.PI * 2,
+      (Math.random() - 0.5) * Math.PI * 2,
+      0
+    )
+  );
+
+  const matrix = new THREE.Matrix4();
+  matrix.makeRotationFromQuaternion(quaternion);
+  matrix.setPosition(position);
+  // Provide the matrix to the mesh
+  mesh.setMatrixAt(i, matrix);
+}
 
 // // Tip 29
 // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))

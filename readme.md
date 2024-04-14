@@ -107,3 +107,16 @@
 
     Cheap Materials:
     Also try to use cheap materials. MeshStandardMaterial or MeshPhysicalMaterial need more resources than materials such as MeshBasicMaterial, MeshLambertMaterial or MeshPhongMaterial.
+
+20. Meshes:
+    Use InstancedMesh:
+
+    When we merge geometries together we cannot move each cube seperatly, If we need to move one cube than we have to update all the vertices of the geometry.
+
+    we can use instanced mesh to over come this issue.
+
+    It's like we are going to create only one InstancedMesh and we provide transformation matrix for each "instance" of that mesh.
+    The matrix has to be Matrix4, and we can apply any transformation by using the various available methods.
+
+    If we know we are going to update the matrices in the tick function, we have to add this code
+    mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
