@@ -99,3 +99,11 @@
     We don't need to instantiate it, and we can use its methods directly.
 
     Use the mergeBufferGeomtries(...) with an array of geometries. We can then use the merged geometry with a single Mesh.
+
+19. Materials:
+
+    Mutualize Materials:
+    If we are using the same type of material for multiple meshes, create only one and use it multiple times.
+
+    Cheap Materials:
+    Also try to use cheap materials. MeshStandardMaterial or MeshPhysicalMaterial need more resources than materials such as MeshBasicMaterial, MeshLambertMaterial or MeshPhongMaterial.

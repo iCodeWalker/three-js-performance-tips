@@ -218,52 +218,52 @@ renderer.shadowMap.needsUpdate = true;
 
 // ######### Merge geometries #########
 
-const geomertries = [];
-for (let i = 0; i < 50; i++) {
-  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  // We will create geometries and we will move the geomtries, instead of moving the mesh because
-  // we only have one mesh.
+// const geomertries = [];
+// for (let i = 0; i < 50; i++) {
+//   const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+//   // We will create geometries and we will move the geomtries, instead of moving the mesh because
+//   // we only have one mesh.
 
-  // All geometries will be placed at the center and than we will move geometries to different points. The
-  // origin point will be same but the vertices will be at different places.
+//   // All geometries will be placed at the center and than we will move geometries to different points. The
+//   // origin point will be same but the vertices will be at different places.
 
-  geometry.rotateX((Math.random() - 0.5) * Math.PI * 2);
-  geometry.rotateY((Math.random() - 0.5) * Math.PI * 2);
+//   geometry.rotateX((Math.random() - 0.5) * Math.PI * 2);
+//   geometry.rotateY((Math.random() - 0.5) * Math.PI * 2);
 
-  geometry.translate(
-    (Math.random() - 0.5) * 10,
-    (Math.random() - 0.5) * 10,
-    (Math.random() - 0.5) * 10
-  );
+//   geometry.translate(
+//     (Math.random() - 0.5) * 10,
+//     (Math.random() - 0.5) * 10,
+//     (Math.random() - 0.5) * 10
+//   );
 
-  // create 50 geometries and save it in the array
-  geomertries.push(geometry);
-}
+//   // create 50 geometries and save it in the array
+//   geomertries.push(geometry);
+// }
 
-const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geomertries);
+// const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geomertries);
 
 // We will have one material, one mesh and one geometry composed of multiple geomertries
+// const material = new THREE.MeshNormalMaterial();
+// const mesh = new THREE.Mesh(mergedGeometry, material);
+
+// scene.add(mesh);
+
+// Tip 19
+// ############ Mutualize Materials #############
+
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+// Puting it outside the loop, so the material is created only once.
 const material = new THREE.MeshNormalMaterial();
-const mesh = new THREE.Mesh(mergedGeometry, material);
+for (let i = 0; i < 50; i++) {
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.x = (Math.random() - 0.5) * 10;
+  mesh.position.y = (Math.random() - 0.5) * 10;
+  mesh.position.z = (Math.random() - 0.5) * 10;
+  mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2;
+  mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2;
 
-scene.add(mesh);
-
-// // Tip 19
-// for(let i = 0; i < 50; i++)
-// {
-//     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
-
-//     const material = new THREE.MeshNormalMaterial()
-
-//     const mesh = new THREE.Mesh(geometry, material)
-//     mesh.position.x = (Math.random() - 0.5) * 10
-//     mesh.position.y = (Math.random() - 0.5) * 10
-//     mesh.position.z = (Math.random() - 0.5) * 10
-//     mesh.rotation.x = (Math.random() - 0.5) * Math.PI * 2
-//     mesh.rotation.y = (Math.random() - 0.5) * Math.PI * 2
-
-//     scene.add(mesh)
-// }
+  scene.add(mesh);
+}
 
 // // Tip 20
 // const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
