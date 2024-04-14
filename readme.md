@@ -1,16 +1,6 @@
-# Three.js Journey
+# Three.js Performance Tips:
 
-## Setup
-Download [Node.js](https://nodejs.org/en/download/).
-Run this followed commands:
-
-``` bash
-# Install dependencies (only the first time)
-npm install
-
-# Run the local server at localhost:8080
-npm run dev
-
-# Build for production in the dist/ directory
-npm run build
-```
+1. Our goal should be to achieve 60 fps at least.
+2. Keep an eye on performance and test across multiple devices, kepp an eye on how heavy is our website.
+3. We need to measure the performance, the first thing we need to know is FPS.
+   We can use a Javascript FPS meter like stats.js
