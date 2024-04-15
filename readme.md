@@ -120,3 +120,64 @@
 
     If we know we are going to update the matrices in the tick function, we have to add this code
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+
+21. Models:
+
+    1. low-polygon:
+       The fewer the polygons, the better. If we need details we can use normal maps.
+
+    2. Draco compression:
+       If the model has a lot of details with very complex geometries, use the DRACO compression. This will result in freeze in the beginning because it needs to be decompressed the geometries and we also need to load the draco library.
+
+    3. Gzip:
+       Gzip is the compression happening on the server side. Most of the servers do not support gzip for files like .glb, .gltf, .obj etc.
+
+22. Camera:
+
+    1. Field of View:
+       When objects are not in the field of view, they won't be rendered (frustum culling). This seems to be not a good solution but we can use it to render less object.
+
+    2. Near and Far:
+       Like field of view, we can reduce the near and far properties of the camera.
+
+23. Renderer:
+
+    1. Pixel ratio:
+       When we set the renderer pixel ratio, don't use the default pixel ratio as some devices can have large pixel ratio. 2 is suffiecient. Use the min value using Math.min(...)
+
+       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    2. Power Preferences:
+       Some devices are able to switch between different GPU or different GPD usage. We can tell the WebGLRendererer on what power is required when instanciating the WebGLRendererer by specifying a 'powerPreference' property
+
+       renderer = new THREE.WebGLRendererer({
+       canvas: canvas,
+       powerPreference: 'high-performance'
+       })
+
+    3. Antialias:
+       The default antialias is performant, but less performant than no antialias. Only add when we have some visible aliasing and no performance issue.
+
+    4. Post processing:
+       Limit passes:
+       Each post-processing pass will take as many pixels as the render's resolution(including pixel ratio) to render.
+
+       If we have a 1920x1080 resolution with 4 passes and pixel ratio of 2, that makes 1920*2*1080*2*4 pixels to render.
+
+       Try to regroup our custom passes into one.
+
+    5. Shaders:
+       We can force the precision of the shaders in the materials by changing their precision property.
+
+       const shaderMaterial = new THREE.ShaderMaterial({
+       precision: 'lowp'
+       })
+
+       This won't work with RawShaderMaterial, and you'll have to add the 'precision' by yourself on the shaders like we did on the shader.
+
+    6. Textures:
+       Using perlin noise functions is cool, but it can affect our performance considerably. Sometimes we better use textures representing noise.
+
+    7. Use defines in shaders.
+
+    8. Do the calculations in the vertex shaders and send the result to the fragment shader.
